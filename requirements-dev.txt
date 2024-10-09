@@ -1,0 +1,7 @@
+openai
+async-openai
+ipython
+ipywidgets
+asyncio 
+aiofiles
+python-dotenv

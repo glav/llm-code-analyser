@@ -1,0 +1,16 @@
+{
+    "configurations": [
+        {
+            "type": "debugpy",
+            "request": "launch",
+            "name": "Debug app.py",
+            "program": "${workspaceFolder}/app/app.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/app",
+            "args": [
+                "--solutionpath",
+                ".."
+            ]
+        }
+    ]
+}
