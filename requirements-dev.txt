@@ -5,3 +5,4 @@ ipywidgets
 asyncio 
 aiofiles
 python-dotenv
+ollama

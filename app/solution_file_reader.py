@@ -37,12 +37,14 @@ directory_exclusion_list = [
     ".vscode",
 ]
 
+file_exclusion_list = ["requirements.txt", "requirements-dev.txt", "requirements.in"]
+
 
 class SolutionFileReader:
     def __init__(self, base_dir):
         self.base_dir = base_dir
 
-    async def get_all_files(self):
+    async def get_all_files_async(self):
         base_dir = pathlib.Path(self.base_dir)
         return [
             str(file)
@@ -52,7 +54,11 @@ class SolutionFileReader:
                 excluded_dir in file.parts for excluded_dir in directory_exclusion_list
             )
             and not any(
-                file_exclude in file.parts for file_exclude in file_type_exclusion_list
+                file_type_exclude in file.parts
+                for file_type_exclude in file_type_exclusion_list
+            )
+            and not any(
+                file_exclude in file.parts for file_exclude in file_exclusion_list
             )
             and not file.is_dir()
         ]
