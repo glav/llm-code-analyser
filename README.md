@@ -9,6 +9,8 @@ This solution assumes you are using [Ollama](https://ollama.com/) and you have a
   - [Table of contents](#table-of-contents)
 - [Pre-requisites](#pre-requisites)
   - [Ensuring Ollama is accessible](#ensuring-ollama-is-accessible)
+    - [Configuring the solution](#configuring-the-solution)
+    - [Running inside a devcontainer](#running-inside-a-devcontainer)
 - [Running the code](#running-the-code)
 
 # Pre-requisites
@@ -28,6 +30,21 @@ If it is running, you should receive:
 ```
 Ollama is running
 ```
+### Configuring the solution
+Set the .env file within the `app` directory with the correct configuration values, use the `.env-sample` as a template. For now, only the `LOCAL_LLM_MODEL_NAME` is used to specify the model to use. 
+```
+ENDPOINT_URL='https://{aoai-name}.openai.azure.com'
+AZURE_OPENAI_API_KEY='{some-key}'
+API_VERSION='2023-03-15-preview'
+LOCAL_LLM_MODEL_NAME='llama3.1'
+```
+### Running inside a devcontainer
+For the solution to work inside a devcontainer, there is a configuration element in the `.devcontainer/devcontainer.json` file that sets the `OLLAMA_HOST` environment variable. This is used by the code to connect to the Ollama service on `localhost:11434`. If you are using a different host or port, you will need to update this value.
+```
+"containerEnv": {
+    	"OLLAMA_HOST": "host.docker.internal:11434" // OLLAMA_HOST is the hostname of the OLLAMA server - this is to enable use of ollama package inside devcontainer
+	},
+```
 
 # Running the code
 To run the analysis on a solution (prefer Java or python), execute the following:
@@ -40,3 +57,5 @@ Where `SOLUTIONPATH` is the path to the solution you want to analyse. For exampl
 python app.py --solutionpath ..
 ```
 This will analyse the solution in the parent directory of the app directory for this solution.
+
+**Important Note:** If you are not using a device with a suitable GPU, this process can take quite some time and consume a lot of CPU.

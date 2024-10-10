@@ -18,6 +18,7 @@ class CodeQueryEngine:
             contents = await self.solution_file_reader.read_contents_async(file)
 
             ## need to chunk here
+            content_to_submit = f"Filename:{file}\n{contents}"
 
             print(f"..Querying code in file: {file}")
             # use a different prompt for code and markdown files
@@ -28,7 +29,7 @@ class CodeQueryEngine:
             response = await self.ollama_client.query_code_async(
                 prompt_templates.SYSTEM_PROMPTS[prompt_type],
                 prompt_templates.USER_PROMPTS[prompt_type],
-                contents,
+                content_to_submit,
             )
             results.append(response["message"]["content"])
         return results
