@@ -7,8 +7,9 @@ from config import show_config
 
 async def main(solution_path):
     engine = CodeQueryEngine(solution_path)
-    results = await engine.execute_async()
-    print(results)
+    await engine.execute_async()
+    # results = await engine.execute_async()
+    # print(results)
     # reader = SolutionFileReader(solution_path)
     # files = await reader.get_all_files()
     # for file in files:

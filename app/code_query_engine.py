@@ -1,5 +1,6 @@
 import prompt_templates
 from ollama_client import OllamaClient
+from result_store import ResultStore
 from solution_file_reader import SolutionFileReader
 
 
@@ -9,10 +10,14 @@ class CodeQueryEngine:
         self.ollama_client = OllamaClient()
         self.solution_file_reader = SolutionFileReader(base_dir=base_dir)
 
-    async def execute_async(self) -> list:
+    async def execute_async(self):
         files = await self.solution_file_reader.get_all_files_async()
-        print(f"..Found {len(files)} files")
+        print(f"..First pass\n..Found {len(files)} files")
         results = []
+        result_store = ResultStore()
+        await result_store.add_result_to_store_async(
+            f"Solution Path: {self.base_dir}\n"
+        )
         for file in files:
             print(f"..Reading file: {file}")
             contents = await self.solution_file_reader.read_contents_async(file)
@@ -22,14 +27,37 @@ class CodeQueryEngine:
 
             print(f"..Querying code in file: {file}")
             # use a different prompt for code and markdown files
-            prompt_type = "code"
+            prompt_type = prompt_templates.PROMPT_TYPE_CODE
             if file.endswith(".md") or file.endswith(".txt"):
-                prompt_type = "markdown"
+                prompt_type = prompt_templates.PROMPT_TYPE_MARKDOWN
 
             response = await self.ollama_client.query_code_async(
                 prompt_templates.SYSTEM_PROMPTS[prompt_type],
                 prompt_templates.USER_PROMPTS[prompt_type],
                 content_to_submit,
             )
-            results.append(response["message"]["content"])
-        return results
+            single_result = f"Filename:{file}\n\n{response["message"]["content"]}"
+            await result_store.add_result_to_store_async(single_result)
+            results.append(single_result)
+        print(f"..Results stored in: {result_store.result_file_name}")
+
+        # final summarisation pass
+        first_pass_context = await result_store.get_results_from_store_async()
+        # import aiofiles
+
+        # async with aiofiles.open(
+        #     "./_results/results-2024-10-11-03-15-26.txt", "r"
+        # ) as f:
+        #     first_pass_context = await f.read()
+
+        response = await self.ollama_client.query_code_async(
+            prompt_templates.SYSTEM_PROMPTS[prompt_templates.PROMPT_TYPE_FINAL_SUMMARY],
+            prompt_templates.USER_PROMPTS[prompt_templates.PROMPT_TYPE_FINAL_SUMMARY],
+            first_pass_context,
+            True,
+        )
+        final_summary = f"---- Final Summary ----\n{response["message"]["content"]}"
+        await result_store.add_result_to_store_async(final_summary)
+        print(
+            f"..Updated final summarisation results stored in: {result_store.result_file_name}"
+        )

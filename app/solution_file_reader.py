@@ -21,6 +21,14 @@ file_type_exclusion_list = [
     ".pytest_cache",
     ".tox",
     "__pycache__",
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".gif",
+    ".pdf",
+    ".docx",
+    ".xlsx",
+    ".pptx",
 ]
 
 directory_exclusion_list = [
@@ -35,6 +43,7 @@ directory_exclusion_list = [
     ".cache",
     ".devcontainer",
     ".vscode",
+    "_results",
 ]
 
 file_exclusion_list = ["requirements.txt", "requirements-dev.txt", "requirements.in"]

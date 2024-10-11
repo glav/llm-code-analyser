@@ -8,13 +8,25 @@ class OllamaClient:
     def __init__(self):
         self.client = AsyncClient()
 
-    async def query_code_async(self, system_prompt, user_prompt, context) -> str:
+    async def query_code_async(
+        self, system_prompt, user_prompt, context, set_context_in_user_prompt=False
+    ) -> str:
+        # Found the below setup (context in system) not as effective as putting the context in the user prompt
+        # when performing a summary of summaries. The context in the system prompt was effective when analysing code though
+        # which is why the flag here is available
+        if set_context_in_user_prompt:
+            user_prompt = f"{user_prompt} ```\nContext:\n" + context + "\n```"
+        else:
+            system_prompt = f"{system_prompt} ```\nContext:\n" + context + "\n```"
         messages = [
             {
                 "role": "system",
-                "content": f"{system_prompt} ```\nContext:\n" + context + "\n```",
+                "content": system_prompt,
             },
-            {"role": "user", "content": user_prompt},
+            {
+                "role": "user",
+                "content": user_prompt,
+            },
         ]
         return await self.client.chat(
             model=config.LOCAL_LLM_MODEL_NAME, messages=messages
