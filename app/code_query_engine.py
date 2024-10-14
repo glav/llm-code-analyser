@@ -23,7 +23,7 @@ class CodeQueryEngine:
             contents = await self.solution_file_reader.read_contents_async(file)
 
             ## need to chunk here
-            content_to_submit = f"Filename:{file}\n{contents}"
+            content_to_submit = f"{contents}"
 
             print(f"..Querying code in file: {file}")
             # use a different prompt for code and markdown files
@@ -36,19 +36,20 @@ class CodeQueryEngine:
                 prompt_templates.USER_PROMPTS[prompt_type],
                 content_to_submit,
             )
-            single_result = f"Filename:{file}\n\n{response["message"]["content"]}"
+            single_result = f"Filename:{file}\n{response["message"]["content"]}"
             await result_store.add_result_to_store_async(single_result)
             results.append(single_result)
         print(f"..Results stored in: {result_store.result_file_name}")
 
         # final summarisation pass
         first_pass_context = await result_store.get_results_from_store_async()
+
+        ######TESTING ONLY
         # import aiofiles
 
-        # async with aiofiles.open(
-        #     "./_results/results-2024-10-11-03-15-26.txt", "r"
-        # ) as f:
+        # async with aiofiles.open("./_results/test_results.txt", "r") as f:
         #     first_pass_context = await f.read()
+        ######TESTING ONLY
 
         response = await self.ollama_client.query_code_async(
             prompt_templates.SYSTEM_PROMPTS[prompt_templates.PROMPT_TYPE_FINAL_SUMMARY],

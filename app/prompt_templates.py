@@ -17,11 +17,13 @@ SYSTEM_PROMPTS = {
         "You should response to any query using the following format: "
         "Purpose: {purpose of the code} "
         "Complexity: {complexity score of the code} "
+        "Dependencies: {dependencies of the code}"
         "for example: "
         "Purpose: This code reads a file and prints the content. "
         "Complexity: 3"
         "Dependencies: AWS S3 storage, network calls to OpenAI"
-        "Ensure your response does not deviate from the format given above, do not add extra content beyond the file name, purpose, complexity, and dependencies."
+        "Ensure your response does not deviate from the format given above, do not add extra content beyond purpose, complexity, and dependencies."
+        "Ensure that Purpose, Complexity and Dependencies are in the same order as above and each one is on a new line directly underneath each other, with no blank lines."
     ),
     "markdown": (
         "You are a helpful assistant, you have good knowledge of coding in the java language as well as a good understanding of the Azure platform. You will use the provided context "
@@ -32,41 +34,27 @@ SYSTEM_PROMPTS = {
         " to providing a ways of executing the solution."
     ),
     "final_summary": (
-        "You are a helpful assistant, you have good knowledge of coding in the java and python languages, SQL query syntax and scripting, as well as a good understanding of the Azure and AWS platform. "
-        "The provided context contains summarised information about the purpose complexity, and dependencies of each file name in a solution described in the context. "
-        "You will use the provided context to answer user questions with detailed explanations. "
-        "You will make sure you understand all the summarisations for each file name. "
-        "Ignore any contennt that is not relevant to the solution such as comments or unnecessary text. "
-        "In this summarisation you should provide a single complexity score and a single purpose for the solution. "
-        "You should list the following information only for this summarisation"
-        "1. The Solution Name "
-        "2. Describe what is the purpose of the solution is in 1-3 sentences only. Do not exceed this 3 sentences. "
-        "3. How complex is the code? You should score the complexity of the code on a scale of 1 to 10 with 1 being very low complexity and 10 being extremely complex. "
-        "4. Describe any dependencies that the code has in one sentence only. Dependencies should include any networking or http communications, database access, or other external services. "
-        "Read each complexity score, purpose and dependency list for each filename the given context before answering questions and think step by step. "
-        "if the filename is not code related, then read the summarised description of the content and use this as context into the final summarrisation"
-        "If you can not answer a user question based on the provided context, do not provide any response. "
-        "Do not use any other information for answering the user."
-        "You should response to any query using the following format: "
-        "Solution name: {solution_name} "
-        "Purpose: {solution_purpose} "
-        "Complexity: {solution_complexity} "
-        "Dependencies: {solution_dependencies}"
-        "for example: "
-        "Solution name: User managament system"
-        "Purpose: This solution adds a user to the system, updates the user information within AWS DynamoDB, and returns the user id"
-        "Complexity: 6"
-        "Dependencies: AWS S3 storage, network calls to OpenAI, DynamoDB"
-        "Ensure your response does not deviate from the format given above, do not add extra content beyond the file name, purpose, complexity, and dependencies."
+        "You are a helpful assistant who provides summaries of content. You have good knowledge of coding in the java and python languages, SQL query syntax and scripting, as well as a good understanding of the Azure and AWS platform. "
+        "You provide a final summary of content related to purpose, complexity, and dependencies of a solution based on all the provided context. "
     ),
 }
 
 
 USER_PROMPTS = {
-    "code": "I want to understand what this code is doing and how complex this code is. Please list any dependencies that the solution has. If you do not detect any dependencies, simply state 'None'"
-    "If you cannot find any code, then do not provide any response. Can you ensure you are as succint as possible in your response and provide the information in the format provided in the system prompt?",
-    "markdown": "Can you summarise the content in 1-2 sentences maximum. Do not exceed 2 sentences and keep the summary as concise as possible. Ensure that the summary is relevant to the context provided.",
-    "final_summary": "Can you analyse all the purpose and complexity using the provided summarised file content in the context and provide a single, final summary of the solution. Ensure that the final summary is relevant to the context provided."
-    "Ensure that your response only contains a single complexity score and a single purpose for the solution. Also list all the dependencies that were found for all the files and components of the solution in a single dependencies list."
-    " Do not provide any other information beyond the complexity score, purpose and dependencies.",
+    "code": "I want to understand what this code is doing and how complex this code is. Please list any dependencies that the solution has. If you do not detect any dependencies, simply state 'None' "
+    "If you cannot find any code, then do not provide any response. Can you ensure you are as succint as possible in your response and provide the information in the format provided in the system prompt? ",
+    "markdown": "Can you summarise the content in 1-2 sentences maximum. Do not exceed 2 sentences and keep the summary as concise as possible. Ensure that the summary is relevant to the context provided. ",
+    "final_summary": "Given the context provided, please generate a concise summary in exactly the same format as the example below. Your summary should include the purpose, complexity, "
+    " and any dependencies noted in the context. Ensure the summary is succinct and focuses solely on the content presented without adding any additional items or details. "
+    " You should provide a single aggregated summary for all the filenames listed. Do not list a summary for each filename."
+    "Output Format: "
+    "Filename: [filename] "
+    "Purpose: [purpose] "
+    "Complexity: [complexity score] "
+    "Dependencies: [list of dependencies or 'None']"
+    " Example: "
+    "Solution name: Replatform Java Webapp on AWS "
+    "Purpose: This solution involves re-platforming a Java-based web application to AWS, utilizing various AWS services and configurations to enhance scalability and reliability. "
+    "Complexity: 6 "
+    "Dependencies: AWS Lambda, S3 storage, MySQL database, AWS RDS, AWS EC2, AWS CloudFormation, AWS VPC, Amazon Cognito, Redis storage, Maven plugins, MySQL JDBC Driver. ",
 }

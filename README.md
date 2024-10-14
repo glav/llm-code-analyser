@@ -30,6 +30,10 @@ If it is running, you should receive:
 ```
 Ollama is running
 ```
+*Note:* If you are executing the command from within the devcontainer, you may need to use the `host.docker.internal` hostname to access the Ollama service running on the host machine. For example:
+```bash
+curl http://host.docker.internal:11434
+```
 ### Configuring the solution
 Set the .env file within the `app` directory with the correct configuration values, use the `.env-sample` as a template. For now, only the `LOCAL_LLM_MODEL_NAME` is used to specify the model to use. 
 ```
