@@ -18,6 +18,7 @@ This solution assumes you are using [Ollama](https://ollama.com/) and you have a
 ![Ollama list](./images/ollama-list.png)
 2. VSCode installed with Python extension
   - However this is not strictly true, but all development has been performed within the devcontainer so many assumptions are already taken care of.
+3. A solution to analyse. You can use the source code of this app or you can try something like [replatform-java-webapp-on-aws](https://github.com/aws-samples/replatform-java-webapp-on-aws) from the AWS Samples GitHub repository.
 
 ## Ensuring Ollama is accessible
 Ollama can be typically accessed via http://localhost:11434 (default - but can be changed - see Ollama documentation). 
@@ -63,3 +64,4 @@ python app.py --solutionpath ..
 This will analyse the solution in the parent directory of the app directory for this solution.
 
 **Important Note:** If you are not using a device with a suitable GPU, this process can take quite some time and consume a lot of CPU.
+
