@@ -11,9 +11,9 @@ API_VERSION = os.getenv("API_VERSION")
 LOCAL_LLM_MODEL_NAME = os.getenv("LOCAL_LLM_MODEL_NAME") or "llama3.1"
 
 all_vars = [
-    "ENDPOINT_URL",
-    "AZURE_OPENAI_API_KEY",
-    "API_VERSION",
+    # "ENDPOINT_URL",
+    # "AZURE_OPENAI_API_KEY",
+    # "API_VERSION",
     "LOCAL_LLM_MODEL_NAME",
 ]
 # Validate that the environment variables are not empty

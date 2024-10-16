@@ -29,6 +29,9 @@ file_type_exclusion_list = [
     ".docx",
     ".xlsx",
     ".pptx",
+    ".conf",
+    ".xml",
+    ".yaml",  # May want to change this and include YAMl to describe any infra
 ]
 
 directory_exclusion_list = [

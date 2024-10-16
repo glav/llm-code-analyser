@@ -36,6 +36,7 @@ class CodeQueryEngine:
                 prompt_templates.SYSTEM_PROMPTS[prompt_type],
                 prompt_templates.USER_PROMPTS[prompt_type],
                 content_to_submit,
+                True,
             )
             single_result = f"Filename:{file}\n{response["message"]["content"]}"
             await result_store.add_result_to_store_async(single_result)
