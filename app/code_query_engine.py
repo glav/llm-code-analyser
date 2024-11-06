@@ -15,7 +15,11 @@ class CodeQueryEngine:
         files = await self.solution_file_reader.get_all_files_async()
         print(f"..First pass\n..Found {len(files)} files")
         results = []
-        result_store = ResultStore(descriptive_suffix=config.LOCAL_LLM_MODEL_NAME)
+        result_store = ResultStore(
+            descriptive_suffix=config.LOCAL_LLM_MODEL_NAME
+            if config.LLM_MODE == "local"
+            else f"{config.LLM_MODE}_{config.AZURE_LLM_MODEL_NAME}"
+        )
         await result_store.add_result_to_store_async(
             f"Solution Path: {self.base_dir}\n"
         )
