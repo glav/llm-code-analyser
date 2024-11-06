@@ -38,9 +38,6 @@ curl http://host.docker.internal:11434
 ### Configuring the solution
 Set the .env file within the `app` directory with the correct configuration values, use the `.env-sample` as a template. For now, only the `LOCAL_LLM_MODEL_NAME` is used to specify the model to use. 
 ```
-ENDPOINT_URL='https://{aoai-name}.openai.azure.com'
-AZURE_OPENAI_API_KEY='{some-key}'
-API_VERSION='2023-03-15-preview'
 LOCAL_LLM_MODEL_NAME='llama3.1'
 ```
 ### Running inside a devcontainer

@@ -12,7 +12,8 @@ class OllamaClient:
         self, system_prompt, user_prompt, context, set_context_in_user_prompt=False
     ) -> str:
         # Found the below setup (context in system) not as effective as putting the context in the user prompt
-        # when performing a summary of summaries. The context in the system prompt was effective when analysing code though
+        # when performing a summary of summaries and other scenarios.
+        # The context in the system prompt was effective when analysing code though
         # which is why the flag here is available
         if set_context_in_user_prompt:
             user_prompt = f"{user_prompt} ```\nContext:\n" + context + "\n```"
