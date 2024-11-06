@@ -6,3 +6,4 @@ asyncio
 aiofiles
 python-dotenv
 ollama
+AzureOpenAI

@@ -1,6 +1,6 @@
 import config
 import prompt_templates
-from ollama_client import OllamaClient
+from ollama_client import LlmClient
 from result_store import ResultStore
 from solution_file_reader import SolutionFileReader
 
@@ -8,7 +8,7 @@ from solution_file_reader import SolutionFileReader
 class CodeQueryEngine:
     def __init__(self, base_dir: str):
         self.base_dir = base_dir
-        self.ollama_client = OllamaClient()
+        self.ollama_client = LlmClient()
         self.solution_file_reader = SolutionFileReader(base_dir=base_dir)
 
     async def execute_async(self):
@@ -38,7 +38,7 @@ class CodeQueryEngine:
                 content_to_submit,
                 True,
             )
-            single_result = f"Filename:{file}\n{response["message"]["content"]}"
+            single_result = f"Filename:{file}\n{response}"
             await result_store.add_result_to_store_async(single_result)
             results.append(single_result)
         print(f"..Results stored in: {result_store.result_file_name}")
@@ -59,7 +59,7 @@ class CodeQueryEngine:
             first_pass_context,
             True,
         )
-        final_summary = f"---- Final Summary ----\n{response["message"]["content"]}"
+        final_summary = f"---- Final Summary ----\n{response}"
         await result_store.add_result_to_store_async(final_summary)
         print(
             f"..Updated final summarisation results stored in: {result_store.result_file_name}"
