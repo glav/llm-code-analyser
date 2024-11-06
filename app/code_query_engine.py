@@ -1,6 +1,6 @@
 import config
 import prompt_templates
-from ollama_client import LlmClient
+from llm_client import LlmClient
 from result_store import ResultStore
 from solution_file_reader import SolutionFileReader
 
