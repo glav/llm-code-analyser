@@ -11,6 +11,8 @@ AZURE_API_VERSION = os.getenv("AZURE_API_VERSION")
 LOCAL_LLM_MODEL_NAME = os.getenv("LOCAL_LLM_MODEL_NAME") or "llama3.1"
 AZURE_LLM_MODEL_NAME = os.getenv("AZURE_LLM_MODEL_NAME") or "gpt-4o"
 LLM_MODE = os.getenv("LLM_MODE") or "local"
+AZURE_STORAGE_CONNECTION_STRING = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
+AZURE_STORAGE_CONTAINER_NAME = os.getenv("AZURE_STORAGE_CONTAINER_NAME")
 
 all_vars = [
     # "AZURE_OPENAI_ENDPOINT",
@@ -33,4 +35,8 @@ def show_config(args):
         print(f"    AZURE_LLM_MODEL_NAME: {AZURE_LLM_MODEL_NAME}")
     else:
         print(f"    LOCAL_LLM_MODEL_NAME: {LOCAL_LLM_MODEL_NAME}")
-    print(f"    Solution Path: [{args.solutionpath}]")
+    if args.ref_image_path:
+        print(f"    Reference Image Path: [{args.ref_image_path}]")
+        print(f"    Target Image Path: [{args.target_image_path}]")
+    else:
+        print(f"    Solution Path: [{args.solution_path}]")

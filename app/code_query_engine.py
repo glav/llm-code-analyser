@@ -8,7 +8,7 @@ from solution_file_reader import SolutionFileReader
 class CodeQueryEngine:
     def __init__(self, base_dir: str):
         self.base_dir = base_dir
-        self.ollama_client = LlmClient()
+        self.llm_client = LlmClient()
         self.solution_file_reader = SolutionFileReader(base_dir=base_dir)
 
     async def execute_async(self):
@@ -36,7 +36,7 @@ class CodeQueryEngine:
             if file.endswith(".md") or file.endswith(".txt"):
                 prompt_type = prompt_templates.PROMPT_TYPE_MARKDOWN
 
-            response = await self.ollama_client.query_code_async(
+            response = await self.llm_client.query_code_async(
                 prompt_templates.SYSTEM_PROMPTS[prompt_type],
                 prompt_templates.USER_PROMPTS[prompt_type],
                 content_to_submit,
@@ -57,7 +57,7 @@ class CodeQueryEngine:
         #     first_pass_context = await f.read()
         ######TESTING ONLY
 
-        response = await self.ollama_client.query_code_async(
+        response = await self.llm_client.query_code_async(
             prompt_templates.SYSTEM_PROMPTS[prompt_templates.PROMPT_TYPE_FINAL_SUMMARY],
             prompt_templates.USER_PROMPTS[prompt_templates.PROMPT_TYPE_FINAL_SUMMARY],
             first_pass_context,
