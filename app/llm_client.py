@@ -1,10 +1,7 @@
-import asyncio
-
 import config
-from azure.storage.blob import ContentSettings
-from azure.storage.blob.aio import BlobServiceClient
 from ollama import AsyncClient
 from openai import AsyncAzureOpenAI
+from utils import delete_blob_from_blob_storage, upload_image_to_blob_storage
 
 
 class LlmClient:
@@ -33,23 +30,6 @@ class LlmClient:
             user_prompt = f"{user_prompt} ```\nContext:\n" + context + "\n```"
         else:
             system_prompt = f"{system_prompt} ```\nContext:\n" + context + "\n```"
-
-        async def upload_image_to_blob_storage(file_path, container_name, blob_name):
-            blob_service_client = BlobServiceClient.from_connection_string(
-                config.AZURE_STORAGE_CONNECTION_STRING
-            )
-            blob_client = blob_service_client.get_blob_client(
-                container=container_name, blob=blob_name
-            )
-
-            with open(file_path, "rb") as data:
-                await blob_client.upload_blob(
-                    data,
-                    overwrite=True,
-                    content_settings=ContentSettings(content_type="image/jpeg"),
-                )
-
-            return blob_client.url
 
         user_message = {
             "role": "user",
@@ -97,9 +77,17 @@ class LlmClient:
             user_message,
         ]
 
-        return await self.client.query_code_async(
+        query_response = await self.client.query_code_async(
             messages=messages,
         )
+        await self.client.close()
+        await delete_blob_from_blob_storage(
+            config.AZURE_STORAGE_CONTAINER_NAME, "reference_image.jpg"
+        )
+        await delete_blob_from_blob_storage(
+            config.AZURE_STORAGE_CONTAINER_NAME, "test_image.jpg"
+        )
+        return query_response
 
 
 class AzureClient:
@@ -116,6 +104,9 @@ class AzureClient:
         )
         return chat_completion.choices[0].message.content
 
+    async def close(self):
+        await self.client.close()
+
 
 class OllamaClient:
     def __init__(self):
@@ -130,31 +121,5 @@ class OllamaClient:
     def list(self):
         return self.client.list()
 
-
-## Just for testing
-async def chat():
-    message = {"role": "user", "content": "Tell me a dad joke"}
-    response = await AsyncClient().chat(
-        model=config.LOCAL_LLM_MODEL_NAME, messages=[message]
-    )
-    print(response["message"]["content"])
-
-
-if __name__ == "__main__":
-    asyncio.run(chat())
-
-# response = ollama.chat(
-#     model="llama3.1:latest",
-#     messages=[
-#         {
-#             "role": "user",
-#             "content": "Why is grass green?",
-#         },
-#     ],
-# )
-
-# print(response)
-# print(response["message"]["content"])
-
-# x = ollama.list()
-# print(x)
+    async def close(self):
+        return  # Does nothing, no close on OllamaClient needed but matches AzureClient API
