@@ -1,6 +1,7 @@
 PROMPT_TYPE_CODE = "code"
 PROMPT_TYPE_MARKDOWN = "markdown"
 PROMPT_TYPE_FINAL_SUMMARY = "final_summary"
+PROMPT_TYPE_IMAGE_COMPARISON = "image_comparison"
 
 SYSTEM_PROMPTS = {
     "code": (
@@ -20,6 +21,14 @@ SYSTEM_PROMPTS = {
         The external dependencies should be presented as an application dependency list based on the provided context.
         The summary should be concise and focus solely on the content presented without adding any additional items or details.
         Ensure you do not include recommendations, or potential improvements as part of the summary."""
+    ),
+    "image_comparison": (
+        """You are a helpful assistant who compares two images of technical architecture solutions to identify differences between them. You have a good knowledge of software architecture, software engineering patterns, and cloud computing services.
+        You also have a good understanding of infrastructure and networking concepts.
+        You will compare one image of an existing reference architecture solution with another image of a target architecture solution to identify how the target image deviates from the reference architecture image.
+        The reference arrchitecture will be the first image and the target architecture will be the second image.
+        You will provide a summarised explanation of the differences between the two images based on the provided context.
+        """
     ),
 }
 
@@ -88,4 +97,21 @@ USER_PROMPTS = {
         Application Purpose: This application involves re-platforming a Java-based web application to AWS, utilizing various AWS services and configurations to enhance scalability and reliability.
         Application Overall Complexity: Medium complexity - There are 5 files requiring moderate changes to migrate to Azure.
         Application Dependency list: AWS Lambda, S3 storage, MySQL database, AWS RDS, AWS EC2, AWS CloudFormation, AWS VPC, Amazon Cognito, Redis storage, Maven plugins, MySQL JDBC Driver.""",
+    "image_comparison": """Can you please compare the two images provided and identify the differences between them. In your response, provide a short summary of the differences,
+        then please list out the specific differences in bullet point form. Your response should attempt to group the differences into logical categories.
+        For example, if there are differences in the networking configuration, you should group these differences together.
+        Your response should follow a format similar to the following but not limited to the topics in this example:
+
+        Summary:
+            [summary of the differences between the two images]
+
+        - Networking Configuration:
+          - No use of private endpoints.
+          - No use of network security groups.
+        - Security Configuration:
+            - No use of encryption at rest.
+            - No use of encryption in transit.
+        - Storage Configuration:
+            - No use of Azure Blob storage.
+            - No use of Azure Table storage.""",
 }

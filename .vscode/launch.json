@@ -3,13 +3,27 @@
         {
             "type": "debugpy",
             "request": "launch",
-            "name": "Debug app.py",
+            "name": "Debug code analysis",
             "program": "${workspaceFolder}/app/app.py",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}/app",
             "args": [
-                "--solutionpath",
+                "--solution-path",
                 ".."
+            ]
+        },
+        {
+            "type": "debugpy",
+            "request": "launch",
+            "name": "Debug image comparison",
+            "program": "${workspaceFolder}/app/app.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/app",
+            "args": [
+                "--ref-image-path",
+                "../.local/ref_arch.png",
+                "--target-image-path",
+                "../.local/test_arch.png"
             ]
         }
     ]

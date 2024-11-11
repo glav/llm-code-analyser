@@ -1,6 +1,6 @@
 import config
 import prompt_templates
-from ollama_client import OllamaClient
+from llm_client import LlmClient
 from result_store import ResultStore
 from solution_file_reader import SolutionFileReader
 
@@ -8,14 +8,18 @@ from solution_file_reader import SolutionFileReader
 class CodeQueryEngine:
     def __init__(self, base_dir: str):
         self.base_dir = base_dir
-        self.ollama_client = OllamaClient()
+        self.llm_client = LlmClient()
         self.solution_file_reader = SolutionFileReader(base_dir=base_dir)
 
     async def execute_async(self):
         files = await self.solution_file_reader.get_all_files_async()
         print(f"..First pass\n..Found {len(files)} files")
         results = []
-        result_store = ResultStore(descriptive_suffix=config.LOCAL_LLM_MODEL_NAME)
+        result_store = ResultStore(
+            descriptive_suffix=config.LOCAL_LLM_MODEL_NAME
+            if config.LLM_MODE == "local"
+            else f"{config.LLM_MODE}_{config.AZURE_LLM_MODEL_NAME}"
+        )
         await result_store.add_result_to_store_async(
             f"Solution Path: {self.base_dir}\n"
         )
@@ -32,13 +36,13 @@ class CodeQueryEngine:
             if file.endswith(".md") or file.endswith(".txt"):
                 prompt_type = prompt_templates.PROMPT_TYPE_MARKDOWN
 
-            response = await self.ollama_client.query_code_async(
+            response = await self.llm_client.query_code_async(
                 prompt_templates.SYSTEM_PROMPTS[prompt_type],
                 prompt_templates.USER_PROMPTS[prompt_type],
                 content_to_submit,
                 True,
             )
-            single_result = f"Filename:{file}\n{response["message"]["content"]}"
+            single_result = f"Filename:{file}\n{response}"
             await result_store.add_result_to_store_async(single_result)
             results.append(single_result)
         print(f"..Results stored in: {result_store.result_file_name}")
@@ -53,13 +57,13 @@ class CodeQueryEngine:
         #     first_pass_context = await f.read()
         ######TESTING ONLY
 
-        response = await self.ollama_client.query_code_async(
+        response = await self.llm_client.query_code_async(
             prompt_templates.SYSTEM_PROMPTS[prompt_templates.PROMPT_TYPE_FINAL_SUMMARY],
             prompt_templates.USER_PROMPTS[prompt_templates.PROMPT_TYPE_FINAL_SUMMARY],
             first_pass_context,
             True,
         )
-        final_summary = f"---- Final Summary ----\n{response["message"]["content"]}"
+        final_summary = f"---- Final Summary ----\n{response}"
         await result_store.add_result_to_store_async(final_summary)
         print(
             f"..Updated final summarisation results stored in: {result_store.result_file_name}"
