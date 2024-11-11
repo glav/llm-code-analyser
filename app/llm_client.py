@@ -1,7 +1,10 @@
 import config
 from ollama import AsyncClient
 from openai import AsyncAzureOpenAI
-from utils import delete_blob_from_blob_storage, upload_image_to_blob_storage
+from utils import (
+    delete_blob_from_blob_storage,
+    upload_image_to_blob_storage_with_identity,
+)
 
 
 class LlmClient:
@@ -40,12 +43,14 @@ class LlmClient:
         }
 
         if config.LLM_MODE == "azure" and ref_image_path and test_image_path:
-            reference_image_url = await upload_image_to_blob_storage(
+            # reference_image_url = await upload_image_to_blob_storage(
+            reference_image_url = await upload_image_to_blob_storage_with_identity(
                 ref_image_path,
                 config.AZURE_STORAGE_CONTAINER_NAME,
                 "reference_image.jpg",
             )
-            test_image_url = await upload_image_to_blob_storage(
+            # test_image_url = await upload_image_to_blob_storage(
+            test_image_url = await upload_image_to_blob_storage_with_identity(
                 test_image_path,
                 config.AZURE_STORAGE_CONTAINER_NAME,
                 "test_image.jpg",
