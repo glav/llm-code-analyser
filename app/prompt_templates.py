@@ -65,7 +65,10 @@ USER_PROMPTS = {
         Dependencies: AWS S3 storage, HTTP calls to OpenAI
 
         Ensure your response does not deviate from the format given above, do not add extra content beyond purpose, complexity, and dependencies.
-        Ensure that Purpose, Complexity and Dependencies are in the same order as above and each one is on a new line directly underneath each other, with no blank lines.""",
+        Ensure that you do not list out any code contents or source code directly.
+        Ensure that Purpose, Complexity and Dependencies are in the same order as above and each one is on a new line directly underneath each other, with no blank lines.
+        It is important that you highlight any detection of secrets such as passwords, API keys, connecgtion strings with passwords.
+        Please highlight any file with a WARNING message""",
     "markdown": """Can you summarise the content in 1-2 sentences maximum. Do not exceed 2 sentences and keep the summary as concise as possible. Ensure that the summary
         is relevant to the context provided.
         For example:
@@ -86,6 +89,8 @@ USER_PROMPTS = {
         When summarising application dependencies, please list the entire set of dependencies that were found for all files, as a single list of all dependencies, not a summary of each file in the application.
         If files do not have any dependencies, then do not list or include them.
         At the end of the summary, can you list all the dependencies that the application uses in a single concise list
+        It is very important that if there is sensitive information detected in any file that those files and specific sensitive information types are
+        highlighted in this summary.
         Your response to the query should always be in the following format and not deviate from this format:
 
         Application purpose: [purpose]
