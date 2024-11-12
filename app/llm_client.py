@@ -1,4 +1,5 @@
 import config
+from azure.identity.aio import DefaultAzureCredential
 from ollama import AsyncClient
 from openai import AsyncAzureOpenAI
 from utils import (
@@ -86,19 +87,31 @@ class LlmClient:
             messages=messages,
         )
         await self.client.close()
-        await delete_blob_from_blob_storage(
-            config.AZURE_STORAGE_CONTAINER_NAME, "reference_image.jpg"
-        )
-        await delete_blob_from_blob_storage(
-            config.AZURE_STORAGE_CONTAINER_NAME, "test_image.jpg"
-        )
+        if config.LLM_MODE == "azure" and ref_image_path and test_image_path:
+            await delete_blob_from_blob_storage(
+                config.AZURE_STORAGE_CONTAINER_NAME, "reference_image.jpg"
+            )
+            await delete_blob_from_blob_storage(
+                config.AZURE_STORAGE_CONTAINER_NAME, "test_image.jpg"
+            )
         return query_response
 
 
 class AzureClient:
     def __init__(self):
+        # self.client = AsyncAzureOpenAI(
+        #     api_key=config.AZURE_OPENAI_API_KEY,
+        #     api_version=config.AZURE_API_VERSION,
+        #     azure_endpoint=config.AZURE_OPENAI_ENDPOINT,
+        # )
+        credential = DefaultAzureCredential()
         self.client = AsyncAzureOpenAI(
-            api_key=config.AZURE_OPENAI_API_KEY,
+            credential=credential,
+            api_version=config.AZURE_API_VERSION,
+            azure_endpoint=config.AZURE_OPENAI_ENDPOINT,
+        )
+        self.client = AsyncAzureOpenAI(
+            credential=credential,
             api_version=config.AZURE_API_VERSION,
             azure_endpoint=config.AZURE_OPENAI_ENDPOINT,
         )
