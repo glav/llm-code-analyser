@@ -25,6 +25,45 @@
                 "--target-image-path",
                 "../.local/test_arch.png"
             ]
+        },
+        {
+            "type": "debugpy",
+            "request": "launch",
+            "name": "Debug code planning result file",
+            "program": "${workspaceFolder}/app/app.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/app",
+            "args": [
+                "--solution-plan-path",
+                "../.local/replatform-java-webapp-on-aws/",
+                "--solution-plan-path-result-file",
+                "_results/results_azure_gpt-4o_plan_2024-11-13-04-33-14.json"
+            ]
+        },
+        {
+            "type": "debugpy",
+            "request": "launch",
+            "name": "Debug code planning",
+            "program": "${workspaceFolder}/app/app.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/app",
+            "args": [
+                "--solution-plan-path",
+                "../.local/replatform-java-webapp-on-aws/"
+            ]
+        },
+        {
+            "type": "debugpy",
+            "request": "launch",
+            "name": "Debug app environment extraction",
+            "program": "${workspaceFolder}/app/app.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/app",
+            "args": [
+                "--solution-app-env-extract-path",
+                "../.local/replatform-java-webapp-on-aws/"
+            ]
         }
+ 
     ]
 }

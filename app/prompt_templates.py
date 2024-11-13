@@ -2,6 +2,7 @@ PROMPT_TYPE_CODE = "code"
 PROMPT_TYPE_MARKDOWN = "markdown"
 PROMPT_TYPE_FINAL_SUMMARY = "final_summary"
 PROMPT_TYPE_IMAGE_COMPARISON = "image_comparison"
+PROMPT_TYPE_PLAN = "plan"
 
 SYSTEM_PROMPTS = {
     "code": (
@@ -9,7 +10,7 @@ SYSTEM_PROMPTS = {
         as well as a good understanding of the Azure and AWS platform. You will use the provided context
         to answer user questions with detailed explanations.
         You will provide a detailed explanation of the code in the context paying particular attention to external dependencies.
-        If you do not see any code in the context or conversation, then do not prrovide any response and simply return empty content to the user."""
+        If you do not see any code in the context or conversation, then do not provide any response and simply return empty content to the user."""
     ),
     "markdown": (
         """You are a helpful assistant, you have good knowledge of coding in the java language as well as a good understanding of the Azure platform. You
@@ -28,6 +29,13 @@ SYSTEM_PROMPTS = {
         You will compare one image of an existing reference architecture solution with another image of a target architecture solution to identify how the target image deviates from the reference architecture image.
         The reference arrchitecture will be the first image and the target architecture will be the second image.
         You will provide a summarised explanation of the differences between the two images based on the provided context.
+        """
+    ),
+    "plan": (
+        """You are an AI assistant that helps developers identify equivalent Azure native services when migrating source code to Azure. When provided with source code,
+        you need to analyze it and identify the dependencies that need to be changed for migration to Azure. DO NOT generate or suggest any source code.
+        Do not provide any source code or suggestions on how to migrate the code.
+        If a format, template or structured output is provided, you MUST adhere to that template.
         """
     ),
 }
@@ -119,4 +127,31 @@ USER_PROMPTS = {
         - Storage Configuration:
             - No use of Azure Blob storage.
             - No use of Azure Table storage.""",
+    "plan": """
+       With the source code provided in the context, Identify any external dependencies and the equivalent Azure native services if applicable.
+       If you do not identify any external dependencies, then simply provide 'None' for the external dependencies.
+       Format the response in line with the following example json structure:
+        {
+            "Filename": "../path/file.java",
+            "Purpose": "The code reads a file and prints the content",
+            "Dependencies": "AWS S3 storage, HTTP calls to OpenAI, MySQL database",
+            "Changes": [
+                {
+                    "Dependency: "AWS S3 storage",
+                     "Action": "Replace with Azure Blob storage"
+                },
+                {
+                    "Dependency: "HTTP calls to OpenAI",
+                    "Action": "Replace with Azure Cognitive Services"
+                },
+                {
+                    "Dependency: "MySQL database",
+                    "Action": "Replace with Azure SQL Database"
+                }
+            ]
+        }
+
+        Make sure the response format strictly adheres to the structure shown and does not deviate. Do not list any steps required to perform the migration and do not include any source code.
+        Do not include any backticks or markup.
+        """,
 }

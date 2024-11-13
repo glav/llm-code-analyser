@@ -7,6 +7,11 @@ from utils import (
     upload_image_to_blob_storage_with_identity,
 )
 
+####################################
+## NOTE: If using identity to auth - your user must 'az login' and that user
+## must have the 'Cognitive Services OpenAI User' for the OPenAI account you want to use
+###################################
+
 
 class LlmClient:
     def __init__(self):

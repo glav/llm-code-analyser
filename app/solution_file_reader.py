@@ -33,6 +33,9 @@ file_type_exclusion_list = [
     ".xml",
     ".jar",
     ".yaml",  # May want to change this and include YAMl to describe any infra
+    ".sh",
+    ".war",
+    ".sql",
 ]
 
 directory_exclusion_list = [
