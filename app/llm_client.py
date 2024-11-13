@@ -1,5 +1,5 @@
 import config
-from azure.identity.aio import DefaultAzureCredential
+from azure.identity.aio import DefaultAzureCredential, get_bearer_token_provider
 from ollama import AsyncClient
 from openai import AsyncAzureOpenAI
 from utils import (
@@ -86,7 +86,6 @@ class LlmClient:
         query_response = await self.client.query_code_async(
             messages=messages,
         )
-        await self.client.close()
         if config.LLM_MODE == "azure" and ref_image_path and test_image_path:
             await delete_blob_from_blob_storage(
                 config.AZURE_STORAGE_CONTAINER_NAME, "reference_image.jpg"
@@ -95,6 +94,9 @@ class LlmClient:
                 config.AZURE_STORAGE_CONTAINER_NAME, "test_image.jpg"
             )
         return query_response
+
+    async def close(self):
+        await self.client.close()
 
 
 class AzureClient:
@@ -105,13 +107,11 @@ class AzureClient:
         #     azure_endpoint=config.AZURE_OPENAI_ENDPOINT,
         # )
         credential = DefaultAzureCredential()
-        self.client = AsyncAzureOpenAI(
-            credential=credential,
-            api_version=config.AZURE_API_VERSION,
-            azure_endpoint=config.AZURE_OPENAI_ENDPOINT,
+        token_provider = get_bearer_token_provider(
+            credential, "https://cognitiveservices.azure.com/.default"
         )
         self.client = AsyncAzureOpenAI(
-            credential=credential,
+            azure_ad_token_provider=token_provider,
             api_version=config.AZURE_API_VERSION,
             azure_endpoint=config.AZURE_OPENAI_ENDPOINT,
         )
