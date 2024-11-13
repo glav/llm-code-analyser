@@ -31,6 +31,7 @@ file_type_exclusion_list = [
     ".pptx",
     ".conf",
     ".xml",
+    ".jar",
     ".yaml",  # May want to change this and include YAMl to describe any infra
 ]
 
