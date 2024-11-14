@@ -48,6 +48,7 @@ AZURE_OPENAI_ENDPOINT = "https://{name}.openai.azure.com"
 AZURE_API_VERSION = "2024-02-15-preview"
 AZURE_LLM_MODEL_NAME = "gpt-4o"
 AZURE_STORAGE_CONNECTION_STRING="<your-storage-acct-connection-string>"  # Only required if you are performing an image analysis using cloud models
+AZURE_AUTH_MODE="key" # key or identity, defaults to key - uses identity from 'az login'
 
 ```
 ### Running inside a devcontainer
