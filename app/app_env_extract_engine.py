@@ -75,24 +75,6 @@ class AppEnvExtractEngine:
 
             await result_store.add_result_to_store_async("]\n")
 
-            # response = await self.llm_client.query_code_async(
-            #     prompt_templates.SYSTEM_PROMPTS[prompt_templates.PROMPT_TYPE_PLAN],
-            #     prompt_templates.USER_PROMPTS[prompt_templates.PROMPT_TYPE_PLAN],
-            #     content_to_submit,
-            #     True,
-            # )
         await result_store.add_result_to_store_async("}\n")
         print(f"..Results stored in: {result_store.result_file_name}")
         self.result_file = result_store.result_file_name
-
-        # summary_store = ResultStore(
-        #     descriptive_suffix=f"{config.LOCAL_LLM_MODEL_NAME}_plansummary"
-        #     if config.LLM_MODE == "local"
-        #     else f"{config.LLM_MODE}_{config.AZURE_LLM_MODEL_NAME}_plansummary",
-        #     results_file_extension="txt",
-        # )
-        # await summary_store.add_result_to_store_async(
-        #     f"SolutionPath: [{self.base_dir}]"
-        # )
-
-        # await self.llm_client.close()
