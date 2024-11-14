@@ -2,7 +2,6 @@ import os
 import re
 
 import config
-from llm_client import LlmClient
 from result_store import ResultStore
 from solution_file_reader import SolutionFileReader
 
@@ -10,7 +9,7 @@ from solution_file_reader import SolutionFileReader
 class AppEnvExtractEngine:
     def __init__(self, base_dir: str):
         self.base_dir = base_dir
-        self.llm_client = LlmClient()
+        # self.llm_client = LlmClient()
 
     async def execute_async(self):
         src_main_resources_path = os.path.join(
@@ -96,4 +95,4 @@ class AppEnvExtractEngine:
         #     f"SolutionPath: [{self.base_dir}]"
         # )
 
-        await self.llm_client.close()
+        # await self.llm_client.close()
