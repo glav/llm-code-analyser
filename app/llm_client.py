@@ -106,20 +106,22 @@ class LlmClient:
 
 class AzureClient:
     def __init__(self):
-        # self.client = AsyncAzureOpenAI(
-        #     api_key=config.AZURE_OPENAI_API_KEY,
-        #     api_version=config.AZURE_API_VERSION,
-        #     azure_endpoint=config.AZURE_OPENAI_ENDPOINT,
-        # )
-        credential = DefaultAzureCredential()
-        token_provider = get_bearer_token_provider(
-            credential, "https://cognitiveservices.azure.com/.default"
-        )
-        self.client = AsyncAzureOpenAI(
-            azure_ad_token_provider=token_provider,
-            api_version=config.AZURE_API_VERSION,
-            azure_endpoint=config.AZURE_OPENAI_ENDPOINT,
-        )
+        if config.AZURE_AUTH_MODE == "identity":
+            credential = DefaultAzureCredential()
+            token_provider = get_bearer_token_provider(
+                credential, "https://cognitiveservices.azure.com/.default"
+            )
+            self.client = AsyncAzureOpenAI(
+                azure_ad_token_provider=token_provider,
+                api_version=config.AZURE_API_VERSION,
+                azure_endpoint=config.AZURE_OPENAI_ENDPOINT,
+            )
+        else:
+            self.client = AsyncAzureOpenAI(
+                api_key=config.AZURE_OPENAI_API_KEY,
+                api_version=config.AZURE_API_VERSION,
+                azure_endpoint=config.AZURE_OPENAI_ENDPOINT,
+            )
 
     async def query_code_async(self, messages: list[dict[str, str]]) -> str:
         chat_completion = await self.client.chat.completions.create(

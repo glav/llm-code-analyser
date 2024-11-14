@@ -80,5 +80,8 @@ class SolutionFileReader:
         ]
 
     async def read_contents_async(self, file_path) -> str:
-        async with aiofiles.open(file_path, "r") as file:
-            return await file.read()
+        try:
+            async with aiofiles.open(file_path, "r") as file:
+                return await file.read()
+        except Exception:
+            return ""
