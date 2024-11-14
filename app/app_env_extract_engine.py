@@ -1,7 +1,6 @@
 import os
 import re
 
-import config
 from result_store import ResultStore
 from solution_file_reader import SolutionFileReader
 
@@ -25,9 +24,7 @@ class AppEnvExtractEngine:
         print(f"..First pass\n..Found {num_files} files")
 
         result_store = ResultStore(
-            descriptive_suffix=f"{config.LOCAL_LLM_MODEL_NAME}_env"
-            if config.LLM_MODE == "local"
-            else f"{config.LLM_MODE}_{config.AZURE_LLM_MODEL_NAME}_env",
+            descriptive_suffix="_env",
             results_file_extension="json",
         )
         await result_store.add_result_to_store_async("{\n")

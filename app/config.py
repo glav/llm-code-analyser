@@ -23,10 +23,13 @@ all_vars = [
     # "AZURE_API_VERSION",
     "LOCAL_LLM_MODEL_NAME",
 ]
+
+# NOTE! Commenting out for now - need a more flexible env var validation to only validate the
+#       ones needed for the current option
 # Validate that the environment variables are not empty
-for var in all_vars:
-    if not os.getenv(var):
-        raise ValueError(f"{var} environment variable is not set or empty")
+# for var in all_vars:
+#     if not os.getenv(var):
+#         raise ValueError(f"{var} environment variable is not set or empty")
 
 
 def show_config(args):

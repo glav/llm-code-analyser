@@ -59,6 +59,21 @@ For the solution to work inside a devcontainer, there is a configuration element
 ```
 
 # Running the code
+There are multiple options to choose from, all of which do somewhat different functions but you cannot use all at once. Only the `--ref-image-path` and `--target-image-path` can be used together.
+The usage is:
+```python
+cd app
+python app.py {options{...}}
+```
+where options can be: 
+- `--solution-path SOLUTION_PATH`: Path to the solution files
+- `--ref-image-path REF_IMAGE_PATH`: The reference architecture image to compare with
+- `--target-image-path TARGET_IMAGE_PATH`: The target architecture image to compare against the reference architecture image
+- `--solution-plan-path SOLUTION_PLAN_PATH`: Path to the solution files for which to create a migration plan
+- `--solution-plan-path-result-file SOLUTION_PLAN_PATH_RESULT_FILE`: Path to the result file from the `--solution-plan-path` argument from which to process, by passing the generation of the result file and simply creating the plan summary from.
+- `--solution-app-env-extract-path SOLUTION_APP_ENV_EXTRACT_PATH`: Path to the solution files for which to extract the environment information.
+
+
 To run the analysis on a solution (prefer Java or python), execute the following:
 ```bash
 cd app
