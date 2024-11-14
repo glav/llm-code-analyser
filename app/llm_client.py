@@ -1,7 +1,16 @@
 import config
+from azure.identity.aio import DefaultAzureCredential, get_bearer_token_provider
 from ollama import AsyncClient
 from openai import AsyncAzureOpenAI
-from utils import delete_blob_from_blob_storage, upload_image_to_blob_storage
+from utils import (
+    delete_blob_from_blob_storage,
+    upload_image_to_blob_storage_with_identity,
+)
+
+####################################
+## NOTE: If using identity to auth - your user must 'az login' and that user
+## must have the 'Cognitive Services OpenAI User' for the OPenAI account you want to use
+###################################
 
 
 class LlmClient:
@@ -40,12 +49,14 @@ class LlmClient:
         }
 
         if config.LLM_MODE == "azure" and ref_image_path and test_image_path:
-            reference_image_url = await upload_image_to_blob_storage(
+            # reference_image_url = await upload_image_to_blob_storage(
+            reference_image_url = await upload_image_to_blob_storage_with_identity(
                 ref_image_path,
                 config.AZURE_STORAGE_CONTAINER_NAME,
                 "reference_image.jpg",
             )
-            test_image_url = await upload_image_to_blob_storage(
+            # test_image_url = await upload_image_to_blob_storage(
+            test_image_url = await upload_image_to_blob_storage_with_identity(
                 test_image_path,
                 config.AZURE_STORAGE_CONTAINER_NAME,
                 "test_image.jpg",
@@ -80,7 +91,6 @@ class LlmClient:
         query_response = await self.client.query_code_async(
             messages=messages,
         )
-        await self.client.close()
         if config.LLM_MODE == "azure" and ref_image_path and test_image_path:
             await delete_blob_from_blob_storage(
                 config.AZURE_STORAGE_CONTAINER_NAME, "reference_image.jpg"
@@ -90,14 +100,28 @@ class LlmClient:
             )
         return query_response
 
+    async def close(self):
+        await self.client.close()
+
 
 class AzureClient:
     def __init__(self):
-        self.client = AsyncAzureOpenAI(
-            api_key=config.AZURE_OPENAI_API_KEY,
-            api_version=config.AZURE_API_VERSION,
-            azure_endpoint=config.AZURE_OPENAI_ENDPOINT,
-        )
+        if config.AZURE_AUTH_MODE == "identity":
+            credential = DefaultAzureCredential()
+            token_provider = get_bearer_token_provider(
+                credential, "https://cognitiveservices.azure.com/.default"
+            )
+            self.client = AsyncAzureOpenAI(
+                azure_ad_token_provider=token_provider,
+                api_version=config.AZURE_API_VERSION,
+                azure_endpoint=config.AZURE_OPENAI_ENDPOINT,
+            )
+        else:
+            self.client = AsyncAzureOpenAI(
+                api_key=config.AZURE_OPENAI_API_KEY,
+                api_version=config.AZURE_API_VERSION,
+                azure_endpoint=config.AZURE_OPENAI_ENDPOINT,
+            )
 
     async def query_code_async(self, messages: list[dict[str, str]]) -> str:
         chat_completion = await self.client.chat.completions.create(

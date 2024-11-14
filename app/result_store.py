@@ -5,19 +5,24 @@ import aiofiles
 
 
 class ResultStore:
-    def __init__(self, results_dir: str = "./_results/", descriptive_suffix: str = ""):
+    def __init__(
+        self,
+        results_dir: str = "./_results/",
+        descriptive_suffix: str = "",
+        results_file_extension: str = "txt",
+    ):
         self.results_dir: str = (
             results_dir if results_dir.endswith("/") else results_dir + "/"
         )
         self.result_name_suffix: str = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
         self.descriptive_suffix: str = f"{descriptive_suffix}_" if not None else ""
-        self.result_file_name = f"{self.results_dir}results_{self.descriptive_suffix}{self.result_name_suffix}.txt"
+        self.result_file_name = f"{self.results_dir}results_{self.descriptive_suffix}{self.result_name_suffix}.{results_file_extension}"
 
     async def add_result_to_store_async(self, result: str):
         await self._ensure_results_dir_exists_async()
         async with aiofiles.open(self.result_file_name, "a") as f:
             # for result in results:
-            await f.write(f"{result}\n\n")
+            await f.write(f"{result}\n")
 
     async def _ensure_results_dir_exists_async(self):
         if not os.path.exists(self.results_dir):

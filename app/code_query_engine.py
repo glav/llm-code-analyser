@@ -68,3 +68,4 @@ class CodeQueryEngine:
         print(
             f"..Updated final summarisation results stored in: {result_store.result_file_name}"
         )
+        await self.llm_client.close()

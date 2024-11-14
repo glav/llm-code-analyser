@@ -33,6 +33,9 @@ file_type_exclusion_list = [
     ".xml",
     ".jar",
     ".yaml",  # May want to change this and include YAMl to describe any infra
+    ".sh",
+    ".war",
+    ".sql",
 ]
 
 directory_exclusion_list = [
@@ -77,5 +80,8 @@ class SolutionFileReader:
         ]
 
     async def read_contents_async(self, file_path) -> str:
-        async with aiofiles.open(file_path, "r") as file:
-            return await file.read()
+        try:
+            async with aiofiles.open(file_path, "r") as file:
+                return await file.read()
+        except Exception:
+            return ""

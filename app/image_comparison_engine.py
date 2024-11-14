@@ -35,4 +35,5 @@ class ImageComparisonEngine:
         )
 
         await result_store.add_result_to_store_async(response)
+        await self.llm_client.close()
         return

@@ -11,6 +11,7 @@ async_openai==0.0.52
 asyncio==3.4.3
 attrs==24.2.0
 azure-core==1.32.0
+azure-identity==1.19.0
 azure-storage-blob==12.23.1
 azureopenai==0.0.1
 backoff==2.2.1
@@ -43,11 +44,14 @@ lazyops==0.2.84
 loguru==0.7.2
 MarkupSafe==3.0.1
 matplotlib-inline==0.1.7
+msal==1.31.0
+msal-extensions==1.2.0
 multidict==6.1.0
 ollama==0.3.3
 openai==1.51.2
 parso==0.8.4
 pexpect==4.9.0
+portalocker==2.10.1
 prompt_toolkit==3.0.48
 propcache==0.2.0
 ptyprocess==0.7.0
@@ -56,6 +60,7 @@ pycparser==2.22
 pydantic==2.9.2
 pydantic_core==2.23.4
 Pygments==2.18.0
+PyJWT==2.9.0
 python-dotenv==1.0.1
 PyYAML==6.0.2
 referencing==0.35.1
