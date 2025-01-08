@@ -35,7 +35,7 @@ ipython==8.28.0
 ipywidgets==8.1.5
 isodate==0.7.2
 jedi==0.19.1
-Jinja2==3.1.4
+Jinja2==3.1.5
 jiter==0.6.1
 jsonschema==4.23.0
 jsonschema-specifications==2024.10.1
